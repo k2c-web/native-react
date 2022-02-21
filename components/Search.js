@@ -1,9 +1,16 @@
 import { useState } from 'react'
-import { View, TextInput, StyleSheet } from 'react-native'
+import { View, TextInput, Button, StyleSheet } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-export default function Search({ placeHolder }) {
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import Results from './Results'
+
+const Stack = createNativeStackNavigator()
+function SearchComponent({ navigation, placeHolder }) {
   const [city, setCity] = useState('Chelles')
   const changeCity = (e) => setCity(e)
+  const searchCountry = () => {
+    navigation.navigate('Results', { city })
+  }
   return (
     <View style={styles.container}>
       <TextInput
@@ -14,8 +21,19 @@ export default function Search({ placeHolder }) {
         value={city}
       />
 
-      <StatusBar style="auto" />
+      <Button onPress={searchCountry} title="Search" color="#841584" />
+
+      <StatusBar style="auto" hidden />
     </View>
+  )
+}
+
+export default function SearchResults() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Search" component={SearchComponent} />
+      <Stack.Screen name="Results" component={Results} />
+    </Stack.Navigator>
   )
 }
 
